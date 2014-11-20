@@ -70,14 +70,14 @@ extern unsigned int get_rq_info(void);
 
 static u64 input_boost_end_time = 0;
 static bool input_boost_running = false;
-static unsigned int input_boost_duration = 15 * 80; /* ms */
-static unsigned int input_boost_cpus = 2;
+static unsigned int input_boost_duration = 6 * 80; /* ms */
+static unsigned int input_boost_cpus = 3;
 static unsigned int input_boost_enabled = true;
 static bool input_boost_task_alive = false;
 static struct task_struct *input_boost_task;
 
 static unsigned int rq_depth_threshold = 40;
-static unsigned int rq_depth_load_threshold = 70;
+static unsigned int rq_depth_load_threshold = 60;
 static unsigned int rq_depth_cpus_threshold = 4;
 
 static bool first_call = true;

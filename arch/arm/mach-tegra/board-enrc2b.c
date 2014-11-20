@@ -2163,7 +2163,7 @@ static void enrc2b_baseband_init(void)
 	tegra_pinmux_config_table(enrc2b_pinmux_modem, ARRAY_SIZE(enrc2b_pinmux_modem));
 
 #if 0
-	// The Pin behavior now(should be the same for all pcbid) is
+	// The Pin behavior now(should be the same for all pcbid) is 
 	//hboot(IPD) -> kernel_init(INP) -> driver_init(OL) -> modem_on(INP).
 	if ( board_id == PROJECT_PHASE_XB ||
         (board_id == PROJECT_PHASE_XA && sku_id == Global_SKU))

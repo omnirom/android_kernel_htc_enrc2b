@@ -615,7 +615,7 @@ static inline int brightness_adjust(struct device *dev) {
 	struct lp5521_led *ldata;
 	uint8_t data = 0x00;
 	int ret = 0;
-
+	
 	I("%s, current_mode: %d, backlight_mode: %d\n", __func__, current_mode, backlight_mode);
 
 	// if buttons or leds are not on do nothing
@@ -626,7 +626,7 @@ static inline int brightness_adjust(struct device *dev) {
 	ldata = container_of(led_cdev, struct lp5521_led, cdev);
 
 	mutex_lock(&led_mutex);
-
+	
 	if(!strcmp(ldata->cdev.name, "green")){
 		if (current_mode == 1 || current_mode == 2){
 			data = (u8)green_brightness;
@@ -643,7 +643,7 @@ static inline int brightness_adjust(struct device *dev) {
 			ret = i2c_write_block(client, 0x04, &data, 1);
 		}
 	}
-
+		
 	mutex_unlock(&led_mutex);
 	return ret;
 }
@@ -880,11 +880,11 @@ static void lp5521_led_brightness_set(struct led_classdev *led_cdev,
 		brightness = 0;
 	else if (brightness > 255)
 		brightness = 255;
-
+	
 	ldata = container_of(led_cdev, struct lp5521_led, cdev);
 
 	I("%s, %s, brightness = %d\n" , __func__, ldata->cdev.name, brightness);
-
+	
 	if(brightness) {
 		if(!strcmp(ldata->cdev.name, "green"))	 {
 			lp5521_green_on(client);
@@ -1303,7 +1303,7 @@ static ssize_t lp5521_led_blink_store(struct device *dev,
 	ldata = container_of(led_cdev, struct lp5521_led, cdev);
 
 	I("%s, %s, val = %d\n" , __func__, ldata->cdev.name, val);
-
+	
 	if(val) {
 		if(!strcmp(ldata->cdev.name, "green"))	 {
 			if( (current_mode == 4 || amber_mode == 2) && val == 3 )
@@ -1367,7 +1367,7 @@ static ssize_t lp5521_led_slow_blink_store(struct device *dev,
 
 	led_cdev = (struct led_classdev *)dev_get_drvdata(dev);
 	ldata = container_of(led_cdev, struct lp5521_led, cdev);
-
+		
 	I("%s, %s,  val = %d\n" , __func__, ldata->cdev.name, val);
 
 	if(!strcmp(ldata->cdev.name, "button-backlight")) {
@@ -1377,7 +1377,7 @@ static ssize_t lp5521_led_slow_blink_store(struct device *dev,
 				if(slow_blink_brightness_limit)
 					slow_blink_brightness = button_brightness;
 				else
-					slow_blink_brightness = val;
+					slow_blink_brightness = val;				
 				lp5521_led_current_set_for_key(2);
 			}
 		} else {
@@ -1431,7 +1431,7 @@ static ssize_t lp5521_led_currents_store(struct device *dev,
 	ldata = container_of(led_cdev, struct lp5521_led, cdev);
 
 	I("%s, %s, val = %d\n" , __func__, ldata->cdev.name, val);
-
+	
 	if(!strcmp(ldata->cdev.name, "green"))	 {
 		green_currents = val;
 	} else if (!strcmp(ldata->cdev.name, "amber")) {
@@ -1487,7 +1487,7 @@ static ssize_t lp5521_led_lux_store(struct device *dev,
 	ldata = container_of(led_cdev, struct lp5521_led, cdev);
 
 	I("%s, %s, val = %d\n" , __func__, ldata->cdev.name, val);
-
+	
 	if(!strcmp(ldata->cdev.name, "green"))	 {
 		green_brightness = val;
 	} else if (!strcmp(ldata->cdev.name, "amber")) {
@@ -1497,13 +1497,13 @@ static ssize_t lp5521_led_lux_store(struct device *dev,
 	}
 
 	brightness_adjust(dev);
-
+	
 	return count;
 }
 
 static DEVICE_ATTR(lux, 0644, lp5521_led_lux_show,
 					lp5521_led_lux_store);
-
+					
 static ssize_t lp5521_led_pwm_coefficient_show(struct device *dev,
 				  struct device_attribute *attr, char *buf)
 {
@@ -1521,12 +1521,12 @@ static ssize_t lp5521_led_pwm_coefficient_store(struct device *dev,
 	ret = sscanf(buf, "%d", &val);
 	if (ret!=1 || val < 0 || val > 100)
 		return -EINVAL;
-
+	
 	led_cdev = (struct led_classdev *)dev_get_drvdata(dev);
 	ldata = container_of(led_cdev, struct lp5521_led, cdev);
 
 	I("%s, %s, val = %d\n" , __func__, ldata->cdev.name, val);
-
+	
 	if(!strcmp(ldata->cdev.name, "green"))	 {
 		current_pwm_coefficient = val;
 		green_brightness = val;
@@ -1536,7 +1536,7 @@ static ssize_t lp5521_led_pwm_coefficient_store(struct device *dev,
 		amber_brightness = val;
 		brightness_adjust(dev);
 	}
-
+	
 	return count;
 }
 
@@ -1561,19 +1561,19 @@ static ssize_t lp5521_led_lut_coefficient_store(struct device *dev,
 	ret = sscanf(buf, "%d", &val);
 	if (ret!=1 || val < 0 || val > 255)
 		return -EINVAL;
-
+	
 	led_cdev = (struct led_classdev *)dev_get_drvdata(dev);
 	ldata = container_of(led_cdev, struct lp5521_led, cdev);
 
 	I("%s, %s, val = %d\n" , __func__, ldata->cdev.name, val);
-
+	
 	if(!strcmp(ldata->cdev.name, "button-backlight")) {
 		current_lut_coefficient = val;
 		button_brightness = val;
 
 		brightness_adjust(dev);
 	}
-
+	
 	return count;
 }
 
@@ -1603,7 +1603,7 @@ static ssize_t lp5521_led_button_brightness_store(struct device *dev,
 	ldata = container_of(led_cdev, struct lp5521_led, cdev);
 
 	I("%s, %s, val = %d\n" , __func__, ldata->cdev.name, val);
-
+	
 	if(!strcmp(ldata->cdev.name, "button-backlight")) {
 		// 0 will reset it to the boards default value
 		if (val == 0)
@@ -1613,12 +1613,13 @@ static ssize_t lp5521_led_button_brightness_store(struct device *dev,
 
 		brightness_adjust(dev);
 	}
-
+	
 	return count;
 }
 
 static DEVICE_ATTR(button_brightness, 0644, lp5521_led_button_brightness_show,
 					lp5521_led_button_brightness_store);
+
 
 static ssize_t lp5521_slow_blink_brightness_limit_show(struct device *dev,
 				  struct device_attribute *attr, char *buf)
@@ -1643,11 +1644,11 @@ static ssize_t lp5521_slow_blink_brightness_limit_store(struct device *dev,
 	ldata = container_of(led_cdev, struct lp5521_led, cdev);
 
 	I("%s, %s, val = %d\n" , __func__, ldata->cdev.name, val);
-
+	
 	if(!strcmp(ldata->cdev.name, "button-backlight")) {
 		slow_blink_brightness_limit = val;
 	}
-
+	
 	return count;
 }
 
@@ -1715,7 +1716,7 @@ static int lp5521_led_probe(struct i2c_client *client
 		gpio_free(pdata->ena_gpio);
 		return ret;
 	}
-
+		
 	amber_currents = pdata->led_config[0].led_cur;
 	green_currents = pdata->led_config[1].led_cur;
 	button_currents = pdata->led_config[2].led_cur;
@@ -1725,7 +1726,7 @@ static int lp5521_led_probe(struct i2c_client *client
 	button_brightness = pdata->led_config[2].led_lux;
 	button_brightness_board = button_brightness;
 	slow_blink_brightness = 0;
-
+	
    	tegra_gpio_enable(pdata->ena_gpio);
 
 	I("led_config default amber:%d %d green:%d %d button-backlight:%d %d\n", amber_brightness, amber_currents,
@@ -1783,7 +1784,6 @@ static int lp5521_led_probe(struct i2c_client *client
 			E("%s: failed on create attr lut_coefficient [%d]\n", __func__, i);
 			goto err_register_attr_lut_coefficient;
 		}
-
 		ret = device_create_file(cdata->leds[i].cdev.dev, &dev_attr_button_brightness);
 		if (ret < 0) {
 			E("%s: failed on create attr button_brightness [%d]\n", __func__, i);
@@ -1833,7 +1833,7 @@ static int lp5521_led_probe(struct i2c_client *client
 err_fun_init:
 	device_remove_file(&client->dev, &dev_attr_behavior);
 	kfree(cdata);
-
+	
 err_register_attr_slow_blink_brightness_limit:
 	for (i = 0; i < pdata->num_leds; i++) {
 		device_remove_file(cdata->leds[i].cdev.dev,&dev_attr_slow_blink_brightness_limit);
@@ -1950,3 +1950,4 @@ module_exit(lp5521_led_exit);
 
 MODULE_AUTHOR("<ShihHao_Shiung@htc.com>, <Dirk_Chang@htc.com>");
 MODULE_DESCRIPTION("LP5521 LED driver");
+

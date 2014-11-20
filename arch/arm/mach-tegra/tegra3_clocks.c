@@ -1790,7 +1790,6 @@ static int tegra3_pll_clk_set_rate(struct clk *c, unsigned long rate)
 	if (c->state == ON)
 		tegra3_pll_clk_enable(c);
 
-	MF_DEBUG("00000003");
 	return 0;
 }
 
